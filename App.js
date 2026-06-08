@@ -1,10 +1,35 @@
 import { StatusBar } from 'expo-status-bar';
+import { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
 
 export default function App() {
+
+  const [email, setEmail] = useState('');
+  const [contrasenia, setContrasenia] = useState('');
+  const [mensaje, setMensaje] = useState('');
+  const [tipoMensaje, setTipoMensaje] = useState(''); //para ver si un mensaje es bueno o malo
+
+  const login = () => {
+    if (email.trim() === '' || contrasenia.trim() === '') {
+      setMensaje("Por favor complete todos los campos");
+      setTipoMensaje("error");
+      return;
+    }
+
+    const emailCorrecto = "maximoH@gmail.com";
+    const contraCorrecta = "15263748";
+
+    if (email === emailCorrecto && contrasenia === contraCorrecta) {
+      setMensaje("Ingreso exitoso - ¡Bienvenido!");
+      setTipoMensaje("ok");
+    } else {
+      setMensaje("Usuario o contraseña incorrectos, vuelva a intentar");
+      setTipoMensaje("error");
+    }
+  };
+
   return (
     <View style={styles.body}>
-      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerText}>Login App (Apellido, Apellido)</Text>
       </View>
@@ -12,12 +37,36 @@ export default function App() {
       <Image source={require('./assets/Accenture.png')} style={styles.logo} />
 
       <View style={styles.containerLogin}>
-        <TextInput placeholder="Email" placeholderTextColor="#999" style={styles.input}/>
-        <TextInput placeholder="Contraseña" placeholderTextColor="#999" secureTextEntry style={styles.input}/>
+        <TextInput 
+          placeholder="Email" 
+          placeholderTextColor="#999" 
+          style={styles.input} 
+          value={email} 
+          onChangeText={setEmail} 
+        />
+        <TextInput 
+          placeholder="Contraseña" 
+          placeholderTextColor="#999" 
+          secureTextEntry 
+          style={styles.input}
+          value={contrasenia}
+          onChangeText={setContrasenia}
+        />
         
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={login}>
           <Text style={styles.buttonText}>Ingresar</Text>
         </TouchableOpacity>
+
+        {mensaje !== '' && (
+          <Text
+            style={[
+              styles.mensajeTexto,
+              tipoMensaje === 'ok' ? styles.ok : styles.error
+            ]}
+          >
+            {mensaje}
+          </Text>
+        )}
 
         <TouchableOpacity style={styles.mensaje}>
           <Text style={styles.mensajeTexto}>Olvidaste la clave?</Text>
@@ -36,7 +85,6 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
     backgroundColor: '#dddddd',
-    fontFamily: '',
   },
 
   header: {
@@ -86,21 +134,26 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 
-  mensaje: {
-    
-  },
-
   mensajeTexto: {
     fontSize: 15,
-    fontWeight: 500,
     textAlign: "center",
     marginTop: 12,
+  },
+
+  ok: {
+    color: "green",
+    fontWeight: "bold",
+  },
+
+  error: {
+    color: "red",
+    fontWeight: "bold",
   },
 
   logo: {
     width: 214,
     height: 56,
     alignSelf: 'center',
-    marginTop: 60,
+    marginTop: 100,
   },
 });
