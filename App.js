@@ -76,7 +76,6 @@ export default function App() {
           <Text style={styles.mensajeTexto}>Crear Cuenta</Text>
         </TouchableOpacity>
       </View>
-      <StatusBar style="auto" />
     </View>
   );
 }
